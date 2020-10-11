@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ferramenta de Avaliação de Acessibilidade de Aplicações Móveis</title>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
+        <input type="file" name="files" id="files" multiple><br><br>
+        <input type="file" name="manifest" id="manifest" multiple><br><br>
+        <input type="submit" value="Submit" id="btnSubmit">
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#btnSubmit").click(function (event) {
+                // parar o envio para que possamos faze-lo manualmente.
+                event.preventDefault();
+                // capture o formulário
+                var form = $('#fileUploadForm')[0];
+                // crie um FormData {Object}
+                var data = new FormData(form);
+                $("#btnSubmit").prop("disabled", true);
+                // processar
+                $.ajax({
+                    type: "POST",
+                    enctype: 'multipart/form-data',
+                    url: "http://127.0.0.1:5000/accessibility",
+                    data: data,
+                    processData: false, // impedir que o jQuery tranforma a "data" em querystring
+                    contentType: false,
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        $("#btnSubmit").prop("disabled", false);
+                    },
+                    error: function (e) {
+                        console.log(e);
+                        $("#btnSubmit").prop("disabled", false);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
