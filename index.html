@@ -2,12 +2,26 @@
 <html>
 <head>
     <title>Ferramenta de Avaliação de Acessibilidade de Aplicações Móveis</title>
+    <!-- Última versão CSS compilada e minificada -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Tema opcional -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Última versão JavaScript compilada e minificada -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!--CSS da Index-->
+    <link rel="stylesheet" href="css/index-css.css">
 </head>
 <body>
-    <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
-        <input type="file" name="files" id="files" multiple><br><br>
-        <input type="file" name="manifest" id="manifest" multiple><br><br>
-        <input type="submit" value="Submit" id="btnSubmit">
+    <h1>Ferramenta de Avaliação de Acessibilidade de Aplicações Móveis</h1>
+    <form method="POST" enctype="multipart/form-data" id="fileUploadForm" class="simple-login-container">
+        <label for="files">Interfaces da aplicação móvel em formato .xml</label>
+        <input type="file" class="form-control-file" name="files" id="files" multiple><br><br>
+        <label for="manifest">Android Manifest</label>
+        <input type="file" class="form-control-file" name="manifest" id="manifest" multiple><br><br>
+        <input type="submit" value="Enviar" id="btnSubmit" class="btn btn-block btn-login">
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
