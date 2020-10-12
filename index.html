@@ -8,6 +8,9 @@
     <!-- Tema opcional -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <!--Jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
     <!-- Última versão JavaScript compilada e minificada -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -23,17 +26,23 @@
         <input type="file" class="form-control-file" name="manifest" id="manifest" multiple><br><br>
         <input type="submit" value="Enviar" id="btnSubmit" class="btn btn-block btn-login">
     </form>
+    <h3>Problemas de Acessibilidade Encontrados</h3>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <div class="panel-group" role="tablist">
+        <div class="panel panel-default" id="errors_list">
+
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
             $("#btnSubmit").click(function (event) {
                 // parar o envio para que possamos faze-lo manualmente.
                 event.preventDefault();
                 // capture o formulário
-                var form = $('#fileUploadForm')[0];
+                let form = $('#fileUploadForm')[0];
                 // crie um FormData {Object}
-                var data = new FormData(form);
+                let data = new FormData(form);
                 $("#btnSubmit").prop("disabled", true);
                 // processar
                 $.ajax({
@@ -45,7 +54,41 @@
                     contentType: false,
                     cache: false,
                     success: function (data) {
-                        console.log(data);
+                        let errors_list = "";
+                        let groupedData = {};
+                        let arqs = [];
+                        data.erros.forEach(element => {
+                            if (!groupedData[element.arq]) groupedData[element.arq] = [];
+                            groupedData[element.arq].push(element);
+                            arqs.push(element.arq);
+                        });
+
+                        let arqsFilter = arqs.filter(function(i, j){
+                            return arqs.indexOf(i) === j;
+                        });
+
+                        arqsFilter.forEach(arqItem => {
+                            arqItemReplaced = arqItem.replace(".xml", "");
+                            errors_list += `<div class="panel-heading" role="tab" id="${arqItemReplaced}Heading">
+                                <h4 class="panel-title">
+                                <a class="collapsed" data-toggle="collapse" href="#${arqItemReplaced}" aria-expanded="false" aria-controls="${arqItemReplaced}">
+                                    ${arqItemReplaced}
+                                </a>
+                                </h4>
+                            </div>
+                            <div id="${arqItemReplaced}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="${arqItemReplaced}Heading">
+                                <ul class="list-group">`;
+    
+                                groupedData[arqItem].forEach(element => {
+                                    errors_list += `<li class="list-group-item">${element.criterio}</li>`;
+                                });
+
+                                errors_list += `</ul>
+                                    <div class="panel-footer">FIM</div>
+                                </div>`;
+                        });
+
+                        $("#errors_list").html(errors_list);
                         $("#btnSubmit").prop("disabled", false);
                     },
                     error: function (e) {
@@ -54,6 +97,7 @@
                     }
                 });
             });
+
         });
     </script>
 </body>
