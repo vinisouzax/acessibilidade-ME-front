@@ -16,6 +16,9 @@
 
     <!--CSS da Index-->
     <link rel="stylesheet" href="css/index-css.css">
+
+    <!--Font Awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <h1>Ferramenta de Avaliação de Acessibilidade de Aplicações Móveis</h1>
@@ -28,7 +31,7 @@
     </form>
     <h3>Problemas de Acessibilidade Encontrados</h3>
 
-    <div class="panel-group" role="tablist">
+    <div class="panel-group only-padding" role="tablist">
         <div class="panel panel-default" id="errors_list">
 
         </div>
@@ -57,35 +60,51 @@
                         let errors_list = "";
                         let groupedData = {};
                         let arqs = [];
+
+                        //AGRUPA OS ERROS POR ACTIVITY
                         data.erros.forEach(element => {
                             if (!groupedData[element.arq]) groupedData[element.arq] = [];
                             groupedData[element.arq].push(element);
                             arqs.push(element.arq);
                         });
 
+                        //TIRA NOMES REPETIDOS. SERVE PARA A PARTE DE IDENTIFICAR OS PROBLEMAS DE ACESSIBILIDADE POR ACTIVITY
                         let arqsFilter = arqs.filter(function(i, j){
                             return arqs.indexOf(i) === j;
                         });
 
+                        //CRIA LISTA DENTRO DE LISTA, COLOCANDO OS ERROS AGRUPADOS POR ACTIVITY
                         arqsFilter.forEach(arqItem => {
-                            arqItemReplaced = arqItem.replace(".xml", "");
+                            let arqItemReplaced = arqItem.replace(".xml", "").toUpperCase();
                             errors_list += `<div class="panel-heading" role="tab" id="${arqItemReplaced}Heading">
                                 <h4 class="panel-title">
-                                <a class="collapsed" data-toggle="collapse" href="#${arqItemReplaced}" aria-expanded="false" aria-controls="${arqItemReplaced}">
+                                <a class="collapsed color-activity" data-toggle="collapse" href="#${arqItemReplaced}" aria-expanded="false" aria-controls="${arqItemReplaced}">
                                     ${arqItemReplaced}
                                 </a>
                                 </h4>
                             </div>
                             <div id="${arqItemReplaced}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="${arqItemReplaced}Heading">
-                                <ul class="list-group">`;
+                                <table class="erros">  
+                                <thead>
+                                    <tr>
+                                        <th class="row-1 row-DESCRIPTION">DESCRIÇÃO</th>
+                                        <th class="row-2 row-NIVEL">NÍVEL</th>
+                                        <th class="row-3 row-DETALHE">DETALHES</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
     
                                 groupedData[arqItem].forEach(element => {
-                                    errors_list += `<li class="list-group-item">${element.criterio}</li>`;
+                                    errors_list += `<tr>
+                                        <td>${element.description}</td>
+                                        <td>A</td>
+                                        <td><i class="fa fa-file" aria-hidden="true"></i></td>
+                                    </tr>`;
                                 });
 
-                                errors_list += `</ul>
-                                    <div class="panel-footer">FIM</div>
-                                </div>`;
+                            errors_list += `</tbody></table>
+                                <div class="panel-footer color-footer"></div>
+                            </div>`;
                         });
 
                         $("#errors_list").html(errors_list);
