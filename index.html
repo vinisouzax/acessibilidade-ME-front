@@ -42,17 +42,16 @@
         <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-            <h5 class="modal-title" id="modalDetalheLabel">Modal title</h5>
+            <h5 class="modal-title" id="modalDetalheLabel">Detalhes</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="contentDetalhes">
             ...
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
             </div>
         </div>
         </div>
@@ -127,7 +126,8 @@
                                         <td>${element.nivel}</td>
                                         <td>
                                             <button type="button" data-toggle="modal" data-target="#modalDetalhe"
-                                                onclick="setModal('${idComponent}', '${criterio}', '${component}')">
+                                                onclick="setModal('${idComponent}', '${criterio}', '${component}', 
+                                                '${element.description}', '${element.nivel}')">
                                                 <i class="fa fa-file" aria-hidden="true"></i>
                                             </button>
                                         </td>
@@ -151,8 +151,14 @@
 
         });
 
-        function setModal(idComponent, criterio, component){
-            console.log(idComponent, criterio, component);
+        function setModal(idComponent, criterio, component, description, nivel){
+            console.log(component);
+            document.getElementById("contentDetalhes").innerHTML = `<strong>Id</strong>: ${idComponent}<br><br>
+            <strong>Critério</strong>: ${criterio}<br><br>
+            <strong>Nível</strong>: ${nivel}<br><br>
+            <strong>Descrição</strong>: ${description}<br><br>
+            <strong>Código-fonte</strong>: <div id="componentFonte"></div>`;
+            document.getElementById("componentFonte").textContent = component;
         }
 
     </script>
