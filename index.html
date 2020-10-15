@@ -127,7 +127,7 @@
                                         <td>
                                             <button type="button" data-toggle="modal" data-target="#modalDetalhe"
                                                 onclick="setModal('${idComponent}', '${criterio}', '${component}', 
-                                                '${element.description}', '${element.nivel}')">
+                                                '${element.description}', '${element.nivel}', '${element.link}')">
                                                 <i class="fa fa-file" aria-hidden="true"></i>
                                             </button>
                                         </td>
@@ -151,11 +151,12 @@
 
         });
 
-        function setModal(idComponent, criterio, component, description, nivel){
+        function setModal(idComponent, criterio, component, description, nivel, link){
             console.log(component);
             document.getElementById("contentDetalhes").innerHTML = `<strong>Id</strong>: ${idComponent}<br><br>
             <strong>Critério</strong>: ${criterio}<br><br>
             <strong>Nível</strong>: ${nivel}<br><br>
+            <strong><a href="${link}" target="_blank" color="black">Clique aqui para compreender mais sobre o critério ${criterio}</a></strong><br><br>
             <strong>Descrição</strong>: ${description}<br><br>
             <strong>Código-fonte</strong>: <div id="componentFonte"></div>`;
             document.getElementById("componentFonte").textContent = component;
