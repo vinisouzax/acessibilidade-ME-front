@@ -37,7 +37,29 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modalDetalhe" tabindex="-1" role="dialog" aria-labelledby="modalDetalheLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="modalDetalheLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
     <script>
+
         $(document).ready(function () {
             $("#btnSubmit").click(function (event) {
                 // parar o envio para que possamos faze-lo manualmente.
@@ -95,10 +117,20 @@
                                 <tbody>`;
     
                                 groupedData[arqItem].forEach(element => {
+
+                                    let idComponent = JSON.stringify(element.idComponent).replace(/["']/g, "");
+                                    let criterio = JSON.stringify(element.criterio).replace(/["']/g, "");
+                                    let component = JSON.stringify(element.component).replace(/["']/g, "");
+
                                     errors_list += `<tr>
                                         <td>${element.description}</td>
                                         <td>${element.nivel}</td>
-                                        <td><i class="fa fa-file" aria-hidden="true"></i></td>
+                                        <td>
+                                            <button type="button" data-toggle="modal" data-target="#modalDetalhe"
+                                                onclick="setModal('${idComponent}', '${criterio}', '${component}')">
+                                                <i class="fa fa-file" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
                                     </tr>`;
                                 });
 
@@ -118,6 +150,11 @@
             });
 
         });
+
+        function setModal(idComponent, criterio, component){
+            console.log(idComponent, criterio, component);
+        }
+
     </script>
 </body>
 </html>
