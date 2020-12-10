@@ -1,9 +1,9 @@
 body{
-    background-color:#5286F3;
+    background-color:#ADD8E6;
     font-size:14px;
 }
 form{
-    color:#fff;
+    color:#000;
 }
 .simple-login-container{
     width:300px;
@@ -22,7 +22,7 @@ form{
 
 h1,h3{
     text-align: center;
-    color:#fff;
+    color:#000;
 }
 
 .just-padding {
@@ -70,7 +70,6 @@ h1,h3{
 }
 
 .color-activity{
-    background-color: #DCDCDC;
     color: black;
 }
 
@@ -91,7 +90,7 @@ h1,h3{
     word-wrap: break-word;
 }
 .erros th {
-    background: darkblue;
+    background: #4682B4;
     color: white;
 }
 
