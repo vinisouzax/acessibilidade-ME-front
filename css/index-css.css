@@ -1,5 +1,5 @@
 body{
-    background-color:#ADD8E6;
+    background-color:#E6E6FA;
     font-size:14px;
 }
 form{
@@ -16,7 +16,7 @@ form{
 }
 
 .simple-login-container .btn-login{
-    background-color:#FF5964;
+    background-color:#0000CD;
     color:#fff;
 }
 
@@ -65,7 +65,7 @@ h1,h3{
 }
 
 .color-footer{
-    background-color: #FF6347;
+    background-color: #E6E6FA;
     color: white;
 }
 
