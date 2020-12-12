@@ -31,7 +31,15 @@
         <input type="file" class="form-control-file" name="color" id="color" multiple><br><br>
         <input type="submit" value="Enviar" id="btnSubmit" class="btn btn-block btn-login">
     </form>
-    <h3>Problemas de Acessibilidade Encontrados</h3>
+    <h3>Problemas de Acessibilidade Encontrados por Critério</h3>
+
+    <div class="panel-group only-padding" role="tablist">
+        <div class="panel panel-default" id="qtd_erros">
+
+        </div>
+    </div>
+
+    <h3>Problemas de Acessibilidade Encontrados por Interface de Usuário</h3>
 
     <div class="panel-group only-padding" role="tablist">
         <div class="panel panel-default" id="errors_list">
@@ -59,6 +67,8 @@
         </div>
     </div>
 
+    <div id="snackbar">Avaliação finalizada</div>
+
     <script>
 
         $(document).ready(function () {
@@ -80,69 +90,17 @@
                     contentType: false,
                     cache: false,
                     success: function (data) {
-                        let errors_list = "";
-                        let groupedData = {};
-                        let arqs = [];
+                        
+                        let errors_table = set_errors_table(data);
+                        let errors_list = set_errors_list(data);
 
-                        //AGRUPA OS ERROS POR ACTIVITY
-                        data.erros.forEach(element => {
-                            if (!groupedData[element.arq]) groupedData[element.arq] = [];
-                            groupedData[element.arq].push(element);
-                            arqs.push(element.arq);
-                        });
-
-                        //TIRA NOMES REPETIDOS. SERVE PARA A PARTE DE IDENTIFICAR OS PROBLEMAS DE ACESSIBILIDADE POR ACTIVITY
-                        let arqsFilter = arqs.filter(function(i, j){
-                            return arqs.indexOf(i) === j;
-                        });
-
-                        //CRIA LISTA DENTRO DE LISTA, COLOCANDO OS ERROS AGRUPADOS POR ACTIVITY
-                        arqsFilter.forEach(arqItem => {
-                            let arqItemReplaced = arqItem.replace(".xml", "").toUpperCase();
-                            errors_list += `<div class="panel-heading" role="tab" id="${arqItemReplaced}Heading">
-                                <h4 class="panel-title">
-                                <a class="collapsed color-activity" data-toggle="collapse" href="#${arqItemReplaced}" aria-expanded="false" aria-controls="${arqItemReplaced}">
-                                    ${arqItemReplaced}
-                                </a>
-                                </h4>
-                            </div>
-                            <div id="${arqItemReplaced}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="${arqItemReplaced}Heading">
-                                <table class="erros">  
-                                <thead>
-                                    <tr>
-                                        <th class="row-1 row-DESCRIPTION">DESCRIÇÃO</th>
-                                        <th class="row-2 row-NIVEL">NÍVEL</th>
-                                        <th class="row-3 row-DETALHE">DETALHES</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-    
-                                groupedData[arqItem].forEach(element => {
-
-                                    let idComponent = JSON.stringify(element.idComponent).replace(/["']/g, "");
-                                    let criterio = JSON.stringify(element.criterio).replace(/["']/g, "");
-                                    let component = JSON.stringify(element.component).replace(/["']/g, "");
-
-                                    errors_list += `<tr>
-                                        <td>${element.description}</td>
-                                        <td>${element.nivel}</td>
-                                        <td>
-                                            <button type="button" data-toggle="modal" data-target="#modalDetalhe"
-                                                onclick="setModal('${idComponent}', '${criterio}', '${component}', 
-                                                '${element.description}', '${element.nivel}', '${element.link}')">
-                                                <i class="fa fa-file" aria-hidden="true"></i>
-                                            </button>
-                                        </td>
-                                    </tr>`;
-                                });
-
-                            errors_list += `</tbody></table>
-                                <div class="panel-footer color-footer"></div>
-                            </div>`;
-                        });
-
+                        $("#qtd_erros").html(errors_table);
                         $("#errors_list").html(errors_list);
                         $("#btnSubmit").prop("disabled", false);
+
+                        let snack = document.getElementById("snackbar");
+                        snack.className = "show";
+                        setTimeout(function(){ snack.className = snack.className.replace("show", ""); }, 3000);
                     },
                     error: function (e) {
                         console.log(e);
@@ -150,6 +108,122 @@
                     }
                 });
             });
+
+            //FUNÇÃO QUE COLOCA OS ERROS NA LISTAGEM POR ACTIVITYS
+            function set_errors_list(data){
+                let errors_list = "";
+                let groupedData = {};
+                let arqs = [];
+
+                //AGRUPA OS ERROS POR ACTIVITY
+                data.erros.forEach(element => {
+                    if (!groupedData[element.arq]) groupedData[element.arq] = [];
+                    groupedData[element.arq].push(element);
+                    arqs.push(element.arq);
+                });
+
+                //TIRA NOMES REPETIDOS. SERVE PARA A PARTE DE IDENTIFICAR OS PROBLEMAS DE ACESSIBILIDADE POR ACTIVITY
+                let arqsFilter = arqs.filter(function(i, j){
+                    return arqs.indexOf(i) === j;
+                });
+
+                //CRIA LISTA DENTRO DE LISTA, COLOCANDO OS ERROS AGRUPADOS POR ACTIVITY
+                arqsFilter.forEach(arqItem => {
+                    let arqItemReplaced = arqItem.replace(".xml", "").toUpperCase();
+                    errors_list += `<div class="panel-heading" role="tab" id="${arqItemReplaced}Heading">
+                        <h4 class="panel-title">
+                        <a class="collapsed color-activity" data-toggle="collapse" href="#${arqItemReplaced}" aria-expanded="false" aria-controls="${arqItemReplaced}">
+                            ${arqItemReplaced}
+                        </a>
+                        </h4>
+                    </div>
+                    <div id="${arqItemReplaced}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="${arqItemReplaced}Heading">
+                        <table class="erros">  
+                        <thead>
+                            <tr>
+                                <th class="row-1 row-DESCRIPTION">DESCRIÇÃO</th>
+                                <th class="row-2 row-NIVEL">NÍVEL</th>
+                                <th class="row-3 row-DETALHE">DETALHES</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                        groupedData[arqItem].forEach(element => {
+
+                            let idComponent = JSON.stringify(element.idComponent).replace(/["']/g, "");
+                            let criterio = JSON.stringify(element.criterio).replace(/["']/g, "");
+                            let component = JSON.stringify(element.component).replace(/["']/g, "");
+
+                            errors_list += `<tr>
+                                <td>${element.description}</td>
+                                <td>${element.nivel}</td>
+                                <td>
+                                    <button type="button" data-toggle="modal" data-target="#modalDetalhe"
+                                        onclick="setModal('${idComponent}', '${criterio}', '${component}', 
+                                        '${element.description}', '${element.nivel}', '${element.link}')">
+                                        <i class="fa fa-file" aria-hidden="true"></i>
+                                    </button>
+                                </td>
+                            </tr>`;
+                        });
+
+                    errors_list += `</tbody></table>
+                        <div class="panel-footer color-footer"></div>
+                    </div>`;
+                });
+
+                return errors_list;
+            }
+
+            //FUNÇÃO QUE COLOCA OS ERROS NA TABELA DE ERRROS POR CRITÉRIO
+            function set_errors_table(data){
+                let errors_table = "";
+                let groupedData = {};
+                let arqs = [];
+
+                //AGRUPA OS ERROS POR CRITÉRIO
+                data.erros.forEach(element => {
+                    if (!groupedData[element.criterio]) groupedData[element.criterio] = [];
+                    groupedData[element.criterio].push(element);
+                    arqs.push(element.criterio);
+                });
+
+                //TIRA NOMES REPETIDOS. SERVE PARA A PARTE DE IDENTIFICAR OS PROBLEMAS DE ACESSIBILIDADE POR CRITÉRIO
+                let arqsFilter = arqs.filter(function(i, j){
+                    return arqs.indexOf(i) === j;
+                });
+
+                //ORDENAR POR ORDEM ALFABÉTICA
+                arqsFilter.sort(function (a, b){
+                    return (a > b) ? 1 : ((b > a) ? -1 : 0);
+                });
+
+                //CRIA TABELA, COLOCANDO OS ERROS AGRUPADOS POR CRITÉRIO
+                errors_table += `<table class="erros">  
+                        <thead>
+                            <tr>
+                                <th class="row-1 row-CRITERIO">CRITÉRIO</th>
+                                <th class="row-2 row-QTDERROS">QUANTIDADE DE ERROS</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+
+                arqsFilter.forEach(cs => {
+
+                    errors_table += `<tr>
+                        <td>${cs}</td>
+                        <td>${cs.length}</td>
+                    </tr>`;
+
+                });
+
+
+                errors_table += `</tbody></table>
+                        <div class="panel-footer color-footer"></div>
+                    </div>`;
+
+                return errors_table;
+            }
 
         });
 
