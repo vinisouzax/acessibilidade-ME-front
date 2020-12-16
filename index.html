@@ -21,7 +21,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-    <h1>Ferramenta de Avaliação de Acessibilidade de Aplicações Móveis</h1>
+    <h1>AAETool (Android Accessibility Evaluation Tool)</h1>
+    <h3>Ferramenta de Avaliação de Acessibilidade de Aplicações Móveis para Android</h1>
     <form method="POST" enctype="multipart/form-data" id="fileUploadForm" class="simple-login-container">
         <label for="files">Interfaces da aplicação móvel em formato .xml</label>
         <input type="file" class="form-control-file" name="files" id="files" multiple><br><br>
@@ -212,7 +213,7 @@
 
                     errors_table += `<tr>
                         <td>${cs}</td>
-                        <td>${cs.length}</td>
+                        <td>${groupedData[cs].length}</td>
                     </tr>`;
 
                 });
