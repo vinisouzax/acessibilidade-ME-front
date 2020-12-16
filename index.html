@@ -209,14 +209,22 @@
                         </thead>
                         <tbody>`;
 
+                let total = 0;
+
                 arqsFilter.forEach(cs => {
 
                     errors_table += `<tr>
                         <td>${cs}</td>
                         <td>${groupedData[cs].length}</td>
                     </tr>`;
-
+                    
+                    total += groupedData[cs].length;
                 });
+
+                errors_table += `<tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td><strong>${total}</strong></td>
+                </tr>`;
 
 
                 errors_table += `</tbody></table>
