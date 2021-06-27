@@ -143,8 +143,9 @@
                         <thead>
                             <tr>
                                 <th class="row-1 row-DESCRIPTION">DESCRIÇÃO</th>
-                                <th class="row-2 row-NIVEL">NÍVEL</th>
-                                <th class="row-3 row-DETALHE">DETALHES</th>
+                                <th class="row-2 row-CS">CS</th>
+                                <th class="row-3 row-NIVEL">NÍVEL</th>
+                                <th class="row-4 row-DETALHE">DETALHES</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -157,6 +158,7 @@
 
                             errors_list += `<tr>
                                 <td>${element.description}</td>
+                                <td>${element.criterio.split(" - ")[0]}</td>
                                 <td>${element.nivel}</td>
                                 <td>
                                     <button type="button" data-toggle="modal" data-target="#modalDetalhe"
